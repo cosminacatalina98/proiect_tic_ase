@@ -2,6 +2,7 @@
 backend/node_modules
 backend/package-lock.json
 backend/npm-shrinkwrap.json
+backend/.env
 backend/*.log
 backend/*.gz
 
