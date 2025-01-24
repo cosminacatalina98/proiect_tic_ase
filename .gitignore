@@ -1,0 +1,16 @@
+# npm
+backend/node_modules
+backend/package-lock.json
+backend/npm-shrinkwrap.json
+backend/*.log
+backend/*.gz
+
+# Coveralls
+.nyc_output
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+# ignore additional files using core.excludesFile
+# https://git-scm.com/docs/gitignore
