@@ -1,12 +1,6 @@
-
-
-
 <template>
-    <div >
-      <h1>This is  PRODUCTS PAGE</h1>
-    </div>
-  </template>
-
-
-
+  <div class="about">
+    <h1>This is a products page</h1>
+  </div>
+</template>
 
