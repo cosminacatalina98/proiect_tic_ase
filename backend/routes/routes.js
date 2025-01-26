@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const  db  = require("../firebaseadmin.js");
 
 
 router.get('/', (req, res) => {
-    res.send('Hello World2!')
+    res.send('Hello World5!')
   });
   
   router.post('/data', (req, res) => {

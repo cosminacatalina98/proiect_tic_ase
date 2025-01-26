@@ -4,7 +4,11 @@
 */npm-shrinkwrap.json
 */.env
 */*.log
-&/*.gz
+*/*.gz
+
+frontend/firebase.js
+backend/firebaseadmin.js
+backend/proiectgcc-firebase-adminsdk-fbsvc-8722d4d52a.json
 
 
 # Coveralls
