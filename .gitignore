@@ -6,7 +6,7 @@
 */*.log
 */*.gz
 
-frontend/firebase.js
+frontend/src/firebase.js
 backend/firebaseadmin.js
 backend/proiectgcc-firebase-adminsdk-fbsvc-8722d4d52a.json
 

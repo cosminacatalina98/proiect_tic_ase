@@ -1,86 +1,82 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
 
-      <nav>
-        <RouterLink to="/">Acasa</RouterLink>
-        <RouterLink to="/about">Despre</RouterLink>
-        <RouterLink to="/products">Produse</RouterLink>
+      <nav class="navbar">
+        <div class="left-menu">
+          <RouterLink to="/pets">Lista Pacienți</RouterLink>
+          <RouterLink to="/addpet">Adaugă Pacient</RouterLink>
+        </div>
+
+      
+        <div class="right-menu">
+          <RouterLink to="/profile">Profil</RouterLink>
+        </div>
       </nav>
     </div>
   </header>
 
+  
   <RouterView />
 </template>
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
+  position: fixed; 
+  top: 0;
+  left: 0;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  background-color: #333; 
+  color: white;
+  z-index: 1000; 
+  padding: 10px 20px;
+  
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-nav a.router-link-exact-active:hover {
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 16px;
+}
+
+.left-menu,
+.right-menu {
+  display: flex;
+  gap: 20px;
+}
+
+.left-menu a,
+.right-menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.left-menu a:hover,
+.right-menu a:hover {
+  color: #007bff; 
   background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
+  padding: 5px;
 }
 
 @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
+  .navbar {
     font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
   }
+}
+
+body {
+  padding-top: 60px; 
 }
 </style>
