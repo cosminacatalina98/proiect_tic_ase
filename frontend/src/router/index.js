@@ -53,6 +53,13 @@ const router = createRouter({
       props: true, 
     },
 
+    {
+      path: '/editFile/:id',
+      name: 'editFile',
+      component: () => import('../views/EditFile.vue'),
+      props: true, 
+    },
+
 
   ],
 })

@@ -137,6 +137,47 @@ app.get("/api/files/:id", async (req, res) => {
 });
 
 
+app.get("/api/file/:id", async (req, res) => {
+  const fileId = req.params.id; 
+  try {
+  
+    const fileDoc = await db.collection("files").doc(fileId).get();
+
+  
+    if (!fileDoc.exists) {
+      return res.status(404).json({ message: "Fisa nu a fost gasita!" });
+    }
+
+      res.status(200).json({
+      id: fileDoc.id,   
+      ...fileDoc.data(), 
+    });
+  } catch (error) {
+    console.error("Eroare la citirea datelor:", error);
+    res.status(500).json({ error: "Eroare la citirea datelor." });
+  }
+
+});
+
+
+
+app.put("/api/file/:id", async (req, res) => {
+  const fileId = req.params.id;
+  const updatedFileData = req.body;
+  
+  try {
+  
+    await db.collection("files").doc(fileId).update(updatedFileData );
+    res.status(200).json({ message: "Fisa a fost actualizat cu succes" });
+  } catch (error) {
+    console.error("Eroare la actualizarea fisei:", error);
+    res.status(500).json({ error: "Eroare la actualizarea fisei" });
+  }
+});
+
+
+
+
 
 app.listen(port, () => {
 
