@@ -175,6 +175,19 @@ app.put("/api/file/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/file/:id", async (req, res) => {
+  const fileId = req.params.id;
+  
+  try {
+  
+    await db.collection("files").doc(fileId).delete();
+    res.status(200).json({ message: "Fisa stearsa cu succes" });
+  } catch (error) {
+    console.error("Eroare la stergerea fisei:", error);
+    res.status(500).json({ error: "Eroare la stergerea fisei" });
+  }
+});
+
 
 
 
