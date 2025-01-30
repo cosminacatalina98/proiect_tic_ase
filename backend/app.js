@@ -111,6 +111,32 @@ app.post("/api/file", async (req, res) => {
   }
 });
 
+app.get("/api/files/:id", async (req, res) => {
+  const petId = req.params.id; 
+
+  try {
+    const snapshot = await db.collection("files")
+      .where("petId", "==", petId) 
+      .get();
+
+    if (snapshot.empty) {
+      return res.status(404).json({ message: "Nu au fost gasite fise pentru acest animal." });
+    }
+
+    const files = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    res.status(200).json(files);
+    
+  } catch (error) {
+    console.error("Eroare la citirea fiselor:", error);
+    res.status(500).json({ error: "Eroare la citirea fiselor." });
+  }
+});
+
+
 
 app.listen(port, () => {
 
