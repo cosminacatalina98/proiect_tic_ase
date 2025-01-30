@@ -31,6 +31,20 @@ const router = createRouter({
       component: () => import('../views/PetsList.vue'),
     },
 
+    {
+      path: '/editpet/:id',
+      name: 'editpet',
+      component: () => import('../views/EditPet.vue'),
+      props: true, 
+    },
+
+    {
+      path: '/addfile/:id',
+      name: 'addfile',
+      component: () => import('../views/AddFile.vue'),
+      props: true, 
+    },
+
 
 
   ],

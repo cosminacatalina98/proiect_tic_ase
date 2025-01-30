@@ -14,7 +14,7 @@ import { RouterLink, RouterView } from 'vue-router';
 
       
         <div class="right-menu">
-          <RouterLink to="/profile">Profil</RouterLink>
+         <!-- <RouterLink to="/profile">Profil</RouterLink> -->
         </div>
       </nav>
     </div>
