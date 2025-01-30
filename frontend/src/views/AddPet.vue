@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2>Editează un Animal</h2>
-    <form @submit.prevent="updatePet">
+    <h2>Adauga un Animal</h2>
+    <form @submit.prevent="addPet">
       <label for="name">Nume:</label>
       <input v-model="pet.name" id="name" type="text" required />
 
@@ -21,13 +21,15 @@
       <input v-model="pet.color" id="color" type="text" required />
 
       <label for="birthday">Data nasterii:</label>
-      <input v-model="pet.birthday" id="birthday" type="date" required />
+      <input v-model="pet.birthday" id="birthday" type="date"  />
 
       <label for="weight">Greutate:</label>
       <input v-model.number="pet.weight" id="weight" type="number" required />
 
       <label for="vet">Nume Vetrinar:</label>
       <input v-model="pet.vet" id="vet" type="text" required />
+
+
 
       <h3>Informatii Proprietar</h3>
       <label for="ownerName">Nume Proprietar:</label>
@@ -42,118 +44,78 @@
       <label for="email">Email:</label>
       <input v-model="pet.owner.email" id="email" type="email" required />
 
-      <button type="submit">Actualizează Animal</button>
+
+      <button type="submit">Adauga Animal</button>
     </form>
   </div>
 </template>
 
 <script>
-
-
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref } from "vue";
 
 export default {
-  name: "EditPet",
   setup() {
     const pet = ref({
       name: "",
       identificationNumber: "",
       species: "",
       breed: "",
-      gender: "",
-      color: "",
-      birthday: "",
-      vet: "",
+      gender:"",
+      color:"",
+      birthday:"",
+      vet:"",
       weight: null,
       owner: {
         name: "",
-        address: "",
+        address:"",
         phone: "",
-        email: "",
-      },
+        email: ""
+      }
     });
 
-    const route = useRoute();
-    const router = useRouter();
-
-    const fetchPetData = async () => {
-      const petId = route.params.id;
-      console.log("cauta animalul");
+    const addPet = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/pets/${petId}`);
-        if (!response.ok) {
-          throw new Error("Eroare la preluarea datelor animalului");
-        }
-        const data = await response.json();
-        pet.value = data; 
-      } catch (error) {
-        console.error("Eroare la preluarea datelor animalului:", error);
-        alert("A apărut o eroare la preluarea datelor.");
-      }
-    };
-
-    
-    const updatePet = async () => {
-      const petId = route.params.id;
-      try {
-        const response = await fetch(`http://localhost:3000/api/pets/${petId}`, {
-          method: "PUT",
+        const response = await fetch("http://localhost:3000/api/pets", {
+          method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify(pet.value),
+          body: JSON.stringify(pet.value)
         });
 
         if (!response.ok) {
-          throw new Error("Eroare la actualizarea animalului");
+          throw new Error(`Eroare: ${response.statusText}`);
         }
 
         const data = await response.json();
-        alert(`Animal actualizat cu succes! ID: ${petId}`);
-        router.push("/pets"); 
+        alert(`Animal adaugat cu succes! ID: ${data.id}`);
+        pet.value = {
+              name: "",
+              identificationNumber: "",
+              species: "",
+              breed: "",
+              gender:"",
+              color:"",
+              birthday:"",
+              vet:"",
+              weight: null,
+              owner: {
+              name: "",
+              address:"",
+              phone: "",
+              email: ""
+          }
+        };
       } catch (error) {
-        console.error("Eroare la actualizarea animalului:", error);
-        alert("A apărut o eroare la actualizarea animalului.");
+        console.error("Eroare la adaugarea animalului:", error);
+        alert("A aparut o eroare.");
       }
     };
 
-    
-    onMounted(() => {
-      fetchPetData();
-    });
-
     return {
       pet,
-      updatePet,
+      addPet
     };
-  },
+  }
 };
 </script>
-
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-input,
-button {
-  padding: 8px;
-  margin-bottom: 12px;
-  font-size: 16px;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-</style>
