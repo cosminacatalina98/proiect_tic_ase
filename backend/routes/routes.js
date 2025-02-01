@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const  db  = require("../firebaseadmin.js");
+const { verifyToken } = require("../middleware/auth");
+
 
 
 router.get('/', (req, res) => {
@@ -12,6 +14,8 @@ router.get('/', (req, res) => {
     console.log('trying to post the following data: ', data)
     res.send('Succes')
   });
+
+
 
   module.exports = router;
 

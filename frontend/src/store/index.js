@@ -26,6 +26,16 @@ const store = createStore({
   
   
   actions: {
+
+    async refreshToken({ commit }) {
+      const user = auth.currentUser;
+      if (user) {
+        const newToken = await user.getIdToken(true); 
+        commit("setToken", newToken);
+        localStorage.setItem("token", newToken);
+      }
+    },
+
     async login({ commit }, { email, password }) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);

@@ -89,6 +89,7 @@ import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
 import Button from 'primevue/button';
 import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
 
 export default {
   components: { InputText, InputNumber, Dropdown, Calendar, Button },
@@ -112,14 +113,60 @@ export default {
       }
     });
 
+    const router = useRouter();
+
+
+
+    const validateForm = () => {
+      if (!pet.value.name.trim()) {
+        toast.add({ severity: "warn", summary: "Eroare", detail: "Numele este obligatoriu.", life: 3000 });
+        alert("sunt aicic");
+        return false;
+      }
+
+      if (!pet.value.identificationNumber.trim()) {
+        toast.add({ severity: "warn", summary: "Eroare", detail: "Numărul de identificare este obligatoriu.", life: 3000 });
+        return false;
+      }
+
+      if (!pet.value.owner.email.includes("@") || !pet.value.owner.email.includes(".")) {
+        toast.add({ severity: "warn", summary: "Eroare", detail: "Email invalid.", life: 3000 });
+        return false;
+      }
+
+      if (!/^\d{10}$/.test(pet.value.owner.phone)) {
+        toast.add({ severity: "warn", summary: "Eroare", detail: "Telefon invalid (10 cifre necesare).", life: 3000 });
+        return false;
+      }
+
+      if (pet.value.weight <= 0 || isNaN(pet.value.weight)) {
+        toast.add({ severity: "warn", summary: "Eroare", detail: "Greutatea trebuie să fie un număr pozitiv.", life: 3000 });
+        return false;
+      }
+
+      const today = new Date();
+      if (new Date(pet.value.birthday) > today) {
+        toast.add({ severity: "warn", summary: "Eroare", detail: "Data nașterii nu poate fi în viitor.", life: 3000 });
+        return false;
+      }
+
+      return true;
+    };
+
+
+
+
     const addPet = async () => {
       try {
+
+        if (!validateForm()) return;
+
         const token = localStorage.getItem("token");
-           if (!token) {
-            console.error("Token lipsă! Utilizatorul nu este autentificat.");
-            alert("Eroare: Nu ești autentificat!");
-            return;
-          }
+        if (!token) {
+          console.error("Token lipsă! Utilizatorul nu este autentificat.");
+          alert("Eroare: Nu ești autentificat!");
+          return;
+        }
 
 
         const response = await fetch("http://localhost:3000/api/pets", {
@@ -155,6 +202,8 @@ export default {
             email: ""
           }
         };
+        router.push("/pets");
+
       } catch (error) {
         console.error("Eroare la adaugarea animalului:", error);
         alert("A aparut o eroare.");

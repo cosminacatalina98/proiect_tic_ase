@@ -20,6 +20,7 @@
             </div>
           </template>
         </Menubar>
+        
       </div>
       <!-- <div class="wrapper">
 
@@ -46,8 +47,11 @@
       </nav>
     </div> -->
     </header>
+
+    <Toast />
     <div class="container mx-auto px-4">
       <RouterView />
+    
     </div>
   </div>
 </template>
@@ -59,7 +63,7 @@ import { useRouter } from "vue-router";
 import Menubar from 'primevue/menubar';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-
+import Toast from "primevue/toast";
 
 import { ref } from "vue";
 
@@ -70,7 +74,8 @@ export default {
   components: {
     Menubar,
     InputText,
-    Button
+    Button,
+    Toast, 
   },
 
   setup() {

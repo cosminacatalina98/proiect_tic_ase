@@ -18,6 +18,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json()) 
 const { verifyToken } = require('./middleware/auth'); 
 
+const petsRoutes = require("./routes/petsRoutes"); 
+app.use("/api/pets", petsRoutes); 
 
 
 
@@ -83,19 +85,6 @@ app.post("/api/signup", async (req, res) => {
 });
 
 
-
-app.post("/api/pets",verifyToken,  async (req, res) => {
-  const petData = req.body;
-
-  try {
-    console.log("Date primite din frontend:", petData); 
-    const docRef = await db.collection("pets").add(petData);
-    res.status(201).json({ id: docRef.id, message: "Animalul a fost adaugat cu succes!" });
-  } catch (error) {
-    console.error("Eroare la salvarea datelor:", error);
-    res.status(500).json({ error: "Eroare la salvarea datelor." });
-  }
-});
 
 
 app.get("/api/pets",   async (req, res) => {

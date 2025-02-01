@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const  db  = require("../firebaseadmin.js");
+const { verifyToken } = require("../middleware/auth");
+const petsController = require("../controllers/PetsController");
+
+
+router.post("/", verifyToken, petsController.addPet);
+
+  module.exports = router;
+
+  
