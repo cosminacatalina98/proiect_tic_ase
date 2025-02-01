@@ -118,11 +118,12 @@ export default {
     const addFile = async () => {
       try {
 
-
+        const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:3000/api/file", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` 
           },
           body: JSON.stringify({
             ...file.value,

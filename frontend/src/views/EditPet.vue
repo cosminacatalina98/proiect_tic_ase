@@ -4,7 +4,7 @@
     <form @submit.prevent="updatePet">
       <label for="name">Nume:</label>
       <input v-model="pet.name" id="name" type="text" required />
-
+      
       <label for="identificationNumber">Numar identificare:</label>
       <input v-model="pet.identificationNumber" id="identificationNumber" type="text" required />
 
@@ -97,10 +97,13 @@ export default {
     const updatePet = async () => {
       const petId = route.params.id;
       try {
+        const token = localStorage.getItem("token");
         const response = await fetch(`http://localhost:3000/api/pets/${petId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+
           },
           body: JSON.stringify(pet.value),
         });

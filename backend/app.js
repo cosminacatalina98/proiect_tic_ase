@@ -98,7 +98,7 @@ app.post("/api/pets",verifyToken,  async (req, res) => {
 });
 
 
-app.get("/api/pets",  async (req, res) => {
+app.get("/api/pets",   async (req, res) => {
   try {
     const snapshot = await db.collection("pets").get();
     const pets = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));

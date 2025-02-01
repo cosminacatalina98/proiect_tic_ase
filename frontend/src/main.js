@@ -6,6 +6,8 @@ import router from './router'
 import store  from './store';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
+import ToastService from "primevue/toastservice";
+
 
 
 
@@ -20,6 +22,8 @@ app.use(PrimeVue, {
     }
 });
 
+
+app.use(ToastService);
 
 store.dispatch("checkUser");
 

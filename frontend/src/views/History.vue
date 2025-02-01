@@ -61,8 +61,11 @@
       
       const deleteFile = async (id) => {
         try {
+          const token = localStorage.getItem("token");
           const response = await fetch(`http://localhost:3000/api/file/${id}`, {
-            method: 'DELETE',
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`}
           });
           if (response.ok) {
             files.value = files.value.filter((file) => file.id !== id); 
