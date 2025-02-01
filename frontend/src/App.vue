@@ -1,42 +1,78 @@
-
 <template>
-  <header>
-    <div class="wrapper">
+  <div>
+    <header>
+      <div class="card">
+        <Menubar :model="items" class=" bg-slate-100!">
+          <template #item="{ item, props }">
+            <RouterLink v-if="isAuthenticated" :to="item.route" class="hover:bg-slate-200" v-bind="props.action">
+              {{item.label }}
+            </RouterLink>
+          </template>
+          <template #end>
+            <div class="flex items-center gap-2">
+              <!-- <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" /> -->
+              <span v-if="user">{{ user.email }}</span>
+              <Button v-if="isAuthenticated" icon="pi pi-power-off" @click="logout" severity="danger"></Button>
+              <RouterLink v-else to="/login">Conectare</RouterLink>
+              <RouterLink v-if="!isAuthenticated" to="/signup">Inregistrare</RouterLink>
+
+
+            </div>
+          </template>
+        </Menubar>
+      </div>
+      <!-- <div class="wrapper">
 
       <nav class="navbar">
         <div class="left-menu">
           <RouterLink v-if="isAuthenticated" to="/pets">Lista Pacienti</RouterLink>
           <RouterLink v-if="isAuthenticated" to="/addpet">Adauga Pacient</RouterLink>
-          
+
         </div>
 
 
         <div class="right-menu">
-      <span v-if="user">{{ user.email }}</span>
-      <button v-if="isAuthenticated" @click="logout">Deconectare</button>
-      <RouterLink v-else to="/login">Conectare</RouterLink>
-       <RouterLink  v-if="!isAuthenticated" to="/signup">Inregistrare</RouterLink>
- 
+          <span v-if="user">{{ user.email }}</span>
+          <button v-if="isAuthenticated" @click="logout">Deconectare</button>
+          <RouterLink v-else to="/login">Conectare</RouterLink>
+          <RouterLink v-if="!isAuthenticated" to="/signup">Inregistrare</RouterLink>
 
-    </div>
-      
+
+        </div>
+
         <div class="right-menu">
-         <!-- <RouterLink to="/profile">Profil</RouterLink> -->
+          <RouterLink to="/profile">Profil</RouterLink>
         </div>
       </nav>
+    </div> -->
+    </header>
+    <div class="container mx-auto px-4">
+      <RouterView />
     </div>
-  </header>
-
-  
-  <RouterView />
+  </div>
 </template>
 
 <script>
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import Menubar from 'primevue/menubar';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+
+
+import { ref } from "vue";
+
+
+
 
 export default {
+  components: {
+    Menubar,
+    InputText,
+    Button
+  },
+
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -44,31 +80,33 @@ export default {
     const user = computed(() => store.state.user);
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
 
-console.log("Este autentificat:", isAuthenticated.value);
+
+    const items = ref([
+      {
+        label: 'Lista Pacienti',
+        icon: 'pi pi-home',
+        route: '/pets'
+      },
+      {
+        label: 'Adauga Pacienti',
+        icon: 'pi pi-home',
+        route: '/addpet'
+      },
+    ]);
+
+    console.log("Este autentificat:", isAuthenticated.value);
 
     const logout = async () => {
       await store.dispatch("logout");
-      router.push("/login"); 
+      router.push("/login");
     };
 
-    return { user, isAuthenticated, logout };
+    return { user, isAuthenticated, logout, items };
   },
 };
 </script>
 
 <style scoped>
-header {
-  position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #333; 
-  color: white;
-  z-index: 1000; 
-  padding: 10px 20px;
-  
-}
-
 .wrapper {
   display: flex;
   justify-content: space-between;
@@ -97,7 +135,7 @@ header {
 
 .left-menu a:hover,
 .right-menu a:hover {
-  color: #007bff; 
+  color: #007bff;
   background-color: transparent;
   padding: 5px;
 }
@@ -109,6 +147,6 @@ header {
 }
 
 body {
-  padding-top: 60px; 
+  padding-top: 60px;
 }
 </style>
