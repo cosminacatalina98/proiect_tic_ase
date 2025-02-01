@@ -58,7 +58,7 @@
   
       const fetchFileData = async () => {
         const id = route.params.id;
-        console.log("cauta  fisa");
+        console.log("Cauta  fisa");
         try {
           const response = await fetch(`http://localhost:3000/api/file/${id}`);
           if (!response.ok) {
@@ -93,7 +93,7 @@
           router.push("/pets"); 
         } catch (error) {
           console.error("Eroare la actualizarea  fisei:", error);
-          alert("A apărut o eroare la actualizarea fisei.");
+          alert("A aparut o eroare la actualizarea fisei.");
         }
       };
   

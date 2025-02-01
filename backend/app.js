@@ -1,10 +1,11 @@
-//server app
+
 const express = require('express');
 const app = express();
 const httpLogger = require('morgan');
 const cors = require('cors');
-const admin = require("firebase-admin");
-const { db } = require('./firebaseadmin.js'); 
+//const admin = require("firebase-admin");
+const jwt = require("jsonwebtoken");
+const { admin, db } = require('./firebaseadmin.js'); 
 
 require('dotenv').config();
 const port = process.env.PORT || 3000;
@@ -15,9 +16,49 @@ app.use(httpLogger('dev'));
 app.use(cors()) 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json()) 
+const { verifyToken } = require('./middleware/auth'); 
 
 
-app.post("/api/pets", async (req, res) => {
+
+
+const SECRET_KEY = process.env.SECRET_KEY; 
+
+if (!SECRET_KEY) {
+  console.error("SECRET_KEY nu este definit! Verifică fișierul .env.");
+  process.exit(1);
+}
+
+app.post("/api/login", async (req, res) => {
+  console.log("Cerere primita pe /api/login:", req.body); 
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ message: "Token-ul Firebase este necesar" });
+  }
+
+  try {
+    
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, email } = decodedToken;
+
+    
+    const jwtToken = jwt.sign({ uid, email }, SECRET_KEY, { expiresIn: "1h" });
+
+    res.json({ token: jwtToken, user: { uid, email } });
+  } catch (error) {
+    console.error("Eroare la validarea token-ului Firebase:", error);
+    res.status(401).json({ message: "Token Firebase invalid sau expirat" });
+  }
+});
+
+
+
+
+
+
+
+
+app.post("/api/pets",verifyToken,  async (req, res) => {
   const petData = req.body;
 
   try {
@@ -31,7 +72,7 @@ app.post("/api/pets", async (req, res) => {
 });
 
 
-app.get("/api/pets", async (req, res) => {
+app.get("/api/pets",  async (req, res) => {
   try {
     const snapshot = await db.collection("pets").get();
     const pets = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -42,6 +83,8 @@ app.get("/api/pets", async (req, res) => {
   }
 });
 
+
+
 app.get("/api/pets/:id", async (req, res) => {
   const petId = req.params.id; 
   try {
@@ -50,7 +93,7 @@ app.get("/api/pets/:id", async (req, res) => {
 
   
     if (!petDoc.exists) {
-      return res.status(404).json({ message: "Animalul nu a fost găsit!" });
+      return res.status(404).json({ message: "Animalul nu a fost gasit!" });
     }
 
       res.status(200).json({
@@ -168,7 +211,7 @@ app.put("/api/file/:id", async (req, res) => {
   try {
   
     await db.collection("files").doc(fileId).update(updatedFileData );
-    res.status(200).json({ message: "Fisa a fost actualizat cu succes" });
+    res.status(200).json({ message: "Fisa a fost actualizata cu succes" });
   } catch (error) {
     console.error("Eroare la actualizarea fisei:", error);
     res.status(500).json({ error: "Eroare la actualizarea fisei" });
@@ -196,3 +239,8 @@ app.listen(port, () => {
 
   console.log(`Example app listening on port ${port}!`)
 });
+
+
+console.log(" SECRET_KEY:", SECRET_KEY ? " SETAT" : "LIPSEȘTE!");
+
+

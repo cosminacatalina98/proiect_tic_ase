@@ -74,7 +74,7 @@
           pet.value = data; 
         } catch (error) {
           console.error("Eroare la preluarea datelor animalului:", error);
-          alert("A apărut o eroare la preluarea datelor.");
+          alert("A aparut o eroare la preluarea datelor.");
         }
       };
   

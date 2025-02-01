@@ -1,6 +1,3 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router';
-</script>
 
 <template>
   <header>
@@ -8,10 +5,17 @@ import { RouterLink, RouterView } from 'vue-router';
 
       <nav class="navbar">
         <div class="left-menu">
-          <RouterLink to="/pets">Lista Pacienți</RouterLink>
-          <RouterLink to="/addpet">Adaugă Pacient</RouterLink>
+          <RouterLink v-if="isAuthenticated" to="/pets">Lista Pacienti</RouterLink>
+          <RouterLink v-if="isAuthenticated" to="/addpet">Adauga Pacient</RouterLink>
+          
         </div>
 
+
+        <div class="right-menu">
+      <span v-if="user">{{ user.email }}</span>
+      <button v-if="isAuthenticated" @click="logout">Logout</button>
+      <RouterLink v-else to="/login">Login</RouterLink>
+    </div>
       
         <div class="right-menu">
          <!-- <RouterLink to="/profile">Profil</RouterLink> -->
@@ -23,6 +27,31 @@ import { RouterLink, RouterView } from 'vue-router';
   
   <RouterView />
 </template>
+
+<script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+
+export default {
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    const user = computed(() => store.state.user);
+    const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+console.log("Este autentificat:", isAuthenticated.value);
+
+    const logout = async () => {
+      await store.dispatch("logout");
+      router.push("/login"); 
+    };
+
+    return { user, isAuthenticated, logout };
+  },
+};
+</script>
 
 <style scoped>
 header {

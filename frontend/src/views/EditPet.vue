@@ -79,7 +79,7 @@ export default {
 
     const fetchPetData = async () => {
       const petId = route.params.id;
-      console.log("cauta animalul");
+      console.log("Cauta animalul");
       try {
         const response = await fetch(`http://localhost:3000/api/pets/${petId}`);
         if (!response.ok) {
@@ -89,7 +89,7 @@ export default {
         pet.value = data; 
       } catch (error) {
         console.error("Eroare la preluarea datelor animalului:", error);
-        alert("A apărut o eroare la preluarea datelor.");
+        alert("A aparut o eroare la preluarea datelor.");
       }
     };
 
@@ -114,7 +114,7 @@ export default {
         router.push("/pets"); 
       } catch (error) {
         console.error("Eroare la actualizarea animalului:", error);
-        alert("A apărut o eroare la actualizarea animalului.");
+        alert("A aparut o eroare la actualizarea animalului.");
       }
     };
 

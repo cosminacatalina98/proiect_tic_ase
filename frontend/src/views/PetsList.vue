@@ -68,9 +68,9 @@ export default {
         });
         if (response.ok) {
           pets.value = pets.value.filter((pet) => pet.id !== id); 
-          console.log('Pacient șters cu succes');
+          console.log('Pacient sters cu succes');
         } else {
-          console.error('Eroare la ștergere pacient');
+          console.error('Eroare la stergere pacient');
         }
       } catch (error) {
         console.error('Eroare la cererea fetch pentru stergere:', error);

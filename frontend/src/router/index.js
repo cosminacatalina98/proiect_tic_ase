@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from "../store"; // Import Vuex Store
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -23,12 +24,14 @@ const router = createRouter({
       path: '/addpet',
       name: 'addpet',
       component: () => import('../views/AddPet.vue'),
+      meta: { requiresAuth: true } // RUTA PROTEJATA
     },
 
     {
       path: '/pets',
       name: 'pets',
       component: () => import('../views/PetsList.vue'),
+      meta: { requiresAuth: true } 
     },
 
     {
@@ -36,6 +39,7 @@ const router = createRouter({
       name: 'editpet',
       component: () => import('../views/EditPet.vue'),
       props: true, 
+      meta: { requiresAuth: true } 
     },
 
     {
@@ -43,6 +47,7 @@ const router = createRouter({
       name: 'addfile',
       component: () => import('../views/AddFile.vue'),
       props: true, 
+      meta: { requiresAuth: true } 
     },
 
 
@@ -51,6 +56,7 @@ const router = createRouter({
       name: 'history',
       component: () => import('../views/History.vue'),
       props: true, 
+      meta: { requiresAuth: true } 
     },
 
     {
@@ -58,10 +64,32 @@ const router = createRouter({
       name: 'editFile',
       component: () => import('../views/EditFile.vue'),
       props: true, 
+      meta: { requiresAuth: true } 
+    },
+
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/Login.vue'),
+      
     },
 
 
   ],
 })
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = store.getters.isAuthenticated;
+  
+
+
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    console.warn(" Acces restrictionat! Redirectionare catre login...");
+    next("/login"); 
+  } else {
+    next();
+  }
+});
+
 
 export default router
