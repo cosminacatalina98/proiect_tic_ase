@@ -13,8 +13,11 @@
 
         <div class="right-menu">
       <span v-if="user">{{ user.email }}</span>
-      <button v-if="isAuthenticated" @click="logout">Logout</button>
-      <RouterLink v-else to="/login">Login</RouterLink>
+      <button v-if="isAuthenticated" @click="logout">Deconectare</button>
+      <RouterLink v-else to="/login">Conectare</RouterLink>
+       <RouterLink  v-if="!isAuthenticated" to="/signup">Inregistrare</RouterLink>
+ 
+
     </div>
       
         <div class="right-menu">

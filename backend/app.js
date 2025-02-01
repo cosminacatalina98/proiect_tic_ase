@@ -53,8 +53,34 @@ app.post("/api/login", async (req, res) => {
 
 
 
+app.post("/api/signup", async (req, res) => {
+  const { idToken } = req.body;
 
+  if (!idToken) {
+    return res.status(400).json({ message: "Token-ul Firebase este necesar" });
+  }
 
+  try {
+    
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, email } = decodedToken;
+
+  
+     if (!email.endsWith("@vet.ro")) {
+      return res.status(403).json({ message: "Inregistrarea este disponibila doar pentru doctori!" });
+    }
+
+    const SECRET_KEY = process.env.SECRET_KEY;
+    const jwtToken = jwt.sign({ uid, email }, SECRET_KEY, { expiresIn: "1h" });
+
+    await db.collection("users").doc(uid).set({ email });
+
+    res.json({ token: jwtToken, user: { uid, email } });
+  } catch (error) {
+    console.error("Eroare la validarea token-ului Firebase:", error);
+    res.status(401).json({ message: "Token Firebase invalid sau expirat" });
+  }
+});
 
 
 
@@ -108,7 +134,7 @@ app.get("/api/pets/:id", async (req, res) => {
 
 
 
-app.delete("/api/pets/:id", async (req, res) => {
+app.delete("/api/pets/:id",verifyToken, async (req, res) => {
   const petId = req.params.id;
   
   try {
@@ -121,7 +147,7 @@ app.delete("/api/pets/:id", async (req, res) => {
   }
 });
 
-app.put("/api/pets/:id", async (req, res) => {
+app.put("/api/pets/:id",verifyToken, async (req, res) => {
   const petId = req.params.id;
   const updatedPetData = req.body;
   
@@ -135,7 +161,7 @@ app.put("/api/pets/:id", async (req, res) => {
   }
 });
 
-app.post("/api/file", async (req, res) => {
+app.post("/api/file",verifyToken, async (req, res) => {
   const fileData = req.body;
   try {
     
@@ -204,7 +230,7 @@ app.get("/api/file/:id", async (req, res) => {
 
 
 
-app.put("/api/file/:id", async (req, res) => {
+app.put("/api/file/:id",verifyToken,  async (req, res) => {
   const fileId = req.params.id;
   const updatedFileData = req.body;
   
@@ -218,7 +244,7 @@ app.put("/api/file/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/file/:id", async (req, res) => {
+app.delete("/api/file/:id",verifyToken,  async (req, res) => {
   const fileId = req.params.id;
   
   try {
