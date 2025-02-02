@@ -1,44 +1,25 @@
 <template>
-  <div>
-    <h2>Lista Animalelor</h2>
-    <ConfirmDialog /> <
-    
-    <table border="1" cellpadding="10">
-      <thead>
-        <tr>
-          <th>Numar identificare</th>
-          <th>Nume</th>
-          <th>Rasa</th>
-          <th>Specie</th>
-          <th>Proprietar</th>
-          <th></th> 
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="pet in pets" :key="pet.id">
-  <td>{{ pet.identificationNumber }}</td>
-  <td>{{ pet.name }}</td>
-  <td>{{ pet.breed }}</td>
-  <td>{{ pet.species }}</td>
-  <td>{{ pet.owner.name }}</td>
-  <td>
-    <button @click="editPet(pet.id)">Editează</button>
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-semibold text-center my-4">Lista Animalelor</h2>
 
-    <!-- Buton pentru ștergere -->
-    <Button 
-      label="Șterge"  
-      icon="pi pi-trash"
-      severity="danger"
-      class="p-button-sm"
-      @click="confirmDelete(pet)"
-    />
+  
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-for="pet in pets" :key="pet.id" class="bg-white p-6 shadow-lg rounded-xl border">
+        <h3 class="text-lg font-bold text-gray-800">{{ pet.name }}</h3>
+        <p class="text-gray-600"><strong>Nr. Identificare:</strong> {{ pet.identificationNumber }}</p>
+        <p class="text-gray-600"><strong>Rasă:</strong> {{ pet.breed }}</p>
+        <p class="text-gray-600"><strong>Specie:</strong> {{ pet.species }}</p>
+        <p class="text-gray-600"><strong>Proprietar:</strong> {{ pet.owner.name }}</p>
 
-    <button @click="addFile(pet.id)">Adaugă Fișă</button>
-    <button @click="history(pet.id)">Istoric Fișe</button>
-  </td>
-</tr>
-      </tbody>
-    </table>
+      
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button @click="editPet(pet.id)" class="btn btn-soft-blue">Editează</button>
+          <button @click="confirmDelete(pet.id)" class="btn btn-soft-red">Șterge</button>
+          <button @click="addFile(pet.id)" class="btn btn-soft-green">Adaugă Fișă</button>
+          <button @click="history(pet.id)" class="btn btn-soft-yellow">Istoric Fișe</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -145,37 +126,65 @@ export default {
 };
 </script>
 
+
 <style scoped>
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
 
-table {
-  width: 100%;
-  margin: 0 auto;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
-}
-
-th {
-  background-color: #f4f4f4;
-}
-
-button {
-  margin: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-  border: none;
-  background-color: #007bff;
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   color: white;
+  transition: 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+.btn-soft-blue {
+  background-color: #7ea8ff;
+}
+.btn-soft-blue:hover {
+  background-color: #5a92ff;
+}
+
+.btn-soft-red {
+  background-color: #ff7e79;
+}
+.btn-soft-red:hover {
+  background-color: #ff5c58;
+}
+
+.btn-soft-green {
+  background-color: #7ed957;
+}
+.btn-soft-green:hover {
+  background-color: #5cca45;
+}
+
+.btn-soft-yellow {
+  background-color: #f4c430;
+}
+.btn-soft-yellow:hover {
+  background-color: #e6b82e;
+}
+
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+    width: 100%;
+    text-align: center;
+  }
 }
 </style>

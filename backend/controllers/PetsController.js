@@ -1,5 +1,43 @@
 const { db } = require("../firebaseadmin");
 
+
+exports.getAllPets = async (req, res)=> {
+  try {
+    const snapshot = await db.collection("pets").get();
+    const pets = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(pets);
+  } catch (error) {
+    console.error("Eroare la citirea datelor:", error);
+    res.status(500).json({ error: "Eroare la citirea datelor." });
+  }
+};
+
+
+
+exports.getPetById = async (req, res)=> {
+  const petId = req.params.id; 
+  try {
+  
+    const petDoc = await db.collection("pets").doc(petId).get();
+
+  
+    if (!petDoc.exists) {
+      return res.status(404).json({ message: "Animalul nu a fost gasit!" });
+    }
+
+      res.status(200).json({
+      id: petDoc.id,   
+      ...petDoc.data(), 
+    });
+  } catch (error) {
+    console.error("Eroare la citirea datelor:", error);
+    res.status(500).json({ error: "Eroare la citirea datelor." });
+  }
+};
+
+
+
+
 exports.addPet = async (req, res)=> {
     const petData = req.body;
   

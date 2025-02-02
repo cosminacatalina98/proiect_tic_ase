@@ -1,0 +1,13 @@
+const express = require('express');
+const router = express.Router();
+const  db  = require("../firebaseadmin.js");
+const { verifyToken } = require("../middleware/auth");
+const filesController = require("../controllers/FilesController");
+
+
+router.post("/file", verifyToken, filesController.addFile);
+router.get("/files/:id",  filesController.getFilesbyPetId);
+
+
+
+module.exports = router;

@@ -1,38 +1,44 @@
 <template>
-    <div>
-      <h2>Lista Fise</h2>
-      <table border="1" cellpadding="10">
-        <thead>
-          <tr>
-            <th>Data inregistrare</th>
-            <th>Numar identificare</th>
-            <th>Diagnostic</th>
-            <th>Doctor</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="file in files" :key="file.id">
-            <td>{{ file.filedate }}</td>
-            <td>{{ file.petIdentificationNumber }}</td>
-            <td>{{ file.diagnostic }}</td>
-            <td>{{ file.doctor }}</td>
-            <td>
-              <button @click="editFile(file.id)">Editeaza</button>
-              <button @click="deleteFile(file.id)">Sterge</button>
-             
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="container mx-auto px-4">
+    <h2 class="text-2xl font-semibold text-center mb-6">Lista Fișe</h2>
+
+    <div class="flex flex-col lg:flex-row lg:items-start gap-6 w-full">
+      
+      <div class="w-full lg:w-1/3 flex lg:justify-start">
+        <div class="bg-white shadow-md rounded-lg p-6 border-l-4 border-blue-500 w-full">
+          <PetDetails />
+        </div>
+      </div>
+
+      <div class="w-full lg:w-2/3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div v-for="file in files" :key="file.id" class="bg-white shadow-md rounded-lg p-4 border">
+            <p><strong>Data Înregistrare:</strong> {{ file.filedate }}</p>
+            <p><strong>Nr. Identificare:</strong> {{ file.petIdentificationNumber }}</p>
+            <p><strong>Diagnostic:</strong> {{ file.diagnostic }}</p>
+            <p><strong>Doctor:</strong> {{ file.doctor }}</p>
+
+            
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button @click="editFile(file.id)" class="btn btn-blue">Editează</button>
+              <button @click="confirmDelete(file)" class="btn btn-red">Șterge</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </template>
-  
+  </div>
+</template>
+
+
   <script>
   import { ref, onMounted } from 'vue';
   import { useRoute , useRouter } from 'vue-router';
+  import PetDetails from "@/components/PetDetails.vue";
   
   export default {
     name: 'History',
+    components: { PetDetails },
     setup() {
       const files = ref([]);
       const router = useRouter(); 
@@ -96,37 +102,35 @@
   </script>
   
   <style scoped>
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
   
-  table {
-    width: 100%;
-    margin: 0 auto;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f4f4f4;
-  }
-  
-  button {
-    margin: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    border: none;
-    background-color: #007bff;
+  .btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
     color: white;
+    transition: 0.3s ease;
+    border: none;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
   }
   
-  button:hover {
-    background-color: #0056b3;
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  .btn-blue {
+    background-color: #3b82f6;
+  }
+  
+  .btn-red {
+    background-color: #ef4444;
+  }
+  
+  .btn-blue:hover {
+    background-color: #2563eb;
+  }
+  
+  .btn-red:hover {
+    background-color: #dc2626;
   }
   </style>
-  

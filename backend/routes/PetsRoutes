@@ -8,6 +8,8 @@ const petsController = require("../controllers/PetsController");
 router.post("/", verifyToken, petsController.addPet);
 router.put("/:id", verifyToken, petsController.updatePet);
 router.delete("/:id", verifyToken, petsController.deletePet);
+router.get("/", petsController.getAllPets);
+router.get("/:id",  petsController.getPetById);
 
   module.exports = router;
 

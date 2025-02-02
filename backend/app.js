@@ -20,9 +20,13 @@ const { verifyToken } = require('./middleware/auth');
 
 const petsRoutes = require("./routes/petsRoutes"); 
 
+const filesRoutes = require("./routes/FilesRoutes"); 
+
 app.use("/api/pets", petsRoutes); 
 // app.use("/api/pets/:id", petsRoutes); 
 
+
+app.use("/api", filesRoutes);
 
 
 
@@ -91,86 +95,8 @@ app.post("/api/signup", async (req, res) => {
 
 
 
-app.get("/api/pets",   async (req, res) => {
-  try {
-    const snapshot = await db.collection("pets").get();
-    const pets = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    res.status(200).json(pets);
-  } catch (error) {
-    console.error("Eroare la citirea datelor:", error);
-    res.status(500).json({ error: "Eroare la citirea datelor." });
-  }
-});
 
 
-
-app.get("/api/pets/:id", async (req, res) => {
-  const petId = req.params.id; 
-  try {
-  
-    const petDoc = await db.collection("pets").doc(petId).get();
-
-  
-    if (!petDoc.exists) {
-      return res.status(404).json({ message: "Animalul nu a fost gasit!" });
-    }
-
-      res.status(200).json({
-      id: petDoc.id,   
-      ...petDoc.data(), 
-    });
-  } catch (error) {
-    console.error("Eroare la citirea datelor:", error);
-    res.status(500).json({ error: "Eroare la citirea datelor." });
-  }
-});
-
-
-
-
-app.post("/api/file",verifyToken, async (req, res) => {
-  const fileData = req.body;
-  try {
-    
-    console.log("Date primite din frontend:", fileData); 
-    const fileWithPetData = {
-      ...fileData,
-      petId: fileData.petId, 
-      petIdentificationNumber: fileData.petIdentificationNumber, 
-  };
-
-    const docRef = await db.collection("files").add(fileWithPetData);
-    res.status(201).json({ id: docRef.id, message: "Fisa a fost adaugata cu succes!" });
-  } catch (error) {
-    console.error("Eroare la salvarea datelor:", error);
-    res.status(500).json({ error: "Eroare la salvarea datelor." });
-  }
-});
-
-app.get("/api/files/:id", async (req, res) => {
-  const petId = req.params.id; 
-
-  try {
-    const snapshot = await db.collection("files")
-      .where("petId", "==", petId) 
-      .get();
-
-    if (snapshot.empty) {
-      return res.status(404).json({ message: "Nu au fost gasite fise pentru acest animal." });
-    }
-
-    const files = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    res.status(200).json(files);
-    
-  } catch (error) {
-    console.error("Eroare la citirea fiselor:", error);
-    res.status(500).json({ error: "Eroare la citirea fiselor." });
-  }
-});
 
 
 app.get("/api/file/:id", async (req, res) => {
