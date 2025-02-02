@@ -1,5 +1,7 @@
 <template>
   <div class="container mx-auto px-4">
+    <ConfirmDialog></ConfirmDialog>
+
     <h2 class="text-2xl font-semibold text-center mb-6">Lista Fișe</h2>
 
     <div class="flex flex-col lg:flex-row lg:items-start gap-6 w-full">
@@ -34,16 +36,20 @@
   <script>
   import { ref, onMounted } from 'vue';
   import { useRoute , useRouter } from 'vue-router';
+  import ConfirmDialog from "primevue/confirmdialog";
+import { useConfirm } from "primevue/useconfirm";
+import Button from "primevue/button";
   import PetDetails from "@/components/PetDetails.vue";
+  
   
   export default {
     name: 'History',
-    components: { PetDetails },
+    components: { PetDetails, ConfirmDialog , Button },
     setup() {
       const files = ref([]);
       const router = useRouter(); 
       const route = useRoute();
-  
+      const confirm = useConfirm();
     
       const fetchFiles = async () => {
         const petId = route.params.id;
@@ -63,6 +69,18 @@
         console.log('Editare  fisa pacient cu ID:', id);
         router.push(`/editFile/${id}`); 
       };
+
+      const confirmDelete = (file) => {
+      confirm.require({
+        message: `Sigur doriți să ștergeți fisa din data de  ${file.filedate}?`,
+        header: "Confirmare Ștergere",
+        icon: "pi pi-exclamation-triangle",
+        acceptLabel: "Da, șterge",
+        rejectLabel: "Anulează",
+        accept: () => deleteFile(file.id),
+      });
+    };
+
   
       
       const deleteFile = async (id) => {
@@ -95,7 +113,7 @@
         files,
         editFile,
         deleteFile,
-       
+        confirmDelete,
       };
     },
   };

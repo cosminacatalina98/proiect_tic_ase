@@ -7,7 +7,9 @@ const filesController = require("../controllers/FilesController");
 
 router.post("/file", verifyToken, filesController.addFile);
 router.get("/files/:id",  filesController.getFilesbyPetId);
-
+router.get("/file/:id",  filesController.getFilebyId);
+router.put("/file/:id",  filesController.updateFile);
+router.delete("/file/:id",  filesController.deleteFile);
 
 
 module.exports = router;

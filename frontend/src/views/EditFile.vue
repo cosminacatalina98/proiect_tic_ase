@@ -1,38 +1,57 @@
 <template>
-    <div>
-      <h2>Editează Fisa</h2>
-      <form @submit.prevent="updateFile">
-
-        <!-- <label for="name">Nume:</label>
-        <input v-model="pet.name" id="name" type="text" readonly />
-
-        <label for="identificationNumber">Numar identificare:</label>
-        <input v-model="pet.identificationNumber" id="identificationNumber" type="text" readonly />
-    -->
-        <label for="filedate">Data fisa:</label>
-        <input v-model="file.filedate" id="filedate" type="date"  />
-
-        <label for="symptom">Simptome:</label>
-        <input v-model="file.symptom" id="symptom" type="text" required />
-
-        <label for="diagnostic">Diagnostic:</label>
-        <input v-model="file.diagnostic" id="diagnostic" type="text" required />
-
-        <label for="treatment">Tratament:</label>
-        <input v-model="file.treatment" id="treatment" type="text"  />
-
-        <label for="recomandations">Recomandari:</label>
-        <input v-model="file.recomandations" id="recomandations" type="text"  />
-
-        <label for="doctor">Doctor:</label>
-        <input v-model="file.doctor" id="doctor" type="text"  />
+  <div>
+    <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">Editează Fișă Pacient</h2>
+    <div class="flex flex-row justify-center">
+      
+    
 
   
-        <button type="submit">Actualizează Animal</button>
-      </form>
+      <div class="md:basis-2/3 sm:basis-1">
+        <form @submit.prevent="updateFile" class="space-y-4">
+         
+
+          <div>
+            <label for="filedate" class="font-semibold text-gray-700">Data fisa:</label>
+            <input v-model="file.filedate" id="filedate" type="date" class="input-field" />
+          </div>
+
+          <div>
+            <label for="symptom" class="font-semibold text-gray-700">Simptome:</label>
+            <input v-model="file.symptom" id="symptom" type="text" required class="input-field" />
+          </div>
+
+          <div>
+            <label for="diagnostic" class="font-semibold text-gray-700">Diagnostic:</label>
+            <input v-model="file.diagnostic" id="diagnostic" type="text" required class="input-field" />
+          </div>
+
+          <div>
+            <label for="treatment" class="font-semibold text-gray-700">Tratament:</label>
+            <input v-model="file.treatment" id="treatment" type="text" class="input-field" />
+          </div>
+
+          <div>
+            <label for="recomandations" class="font-semibold text-gray-700">Recomandari:</label>
+            <input v-model="file.recomandations" id="recomandations" type="text" class="input-field" />
+          </div>
+
+          <div>
+            <label for="doctor" class="font-semibold text-gray-700">Doctor:</label>
+            <input v-model="file.doctor" id="doctor" type="text" class="input-field" />
+          </div>
+
+          <button type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+            Editează Fișă
+          </button>
+        </form>
+      </div>
     </div>
-  </template>
-  
+  </div>
+</template>
+
+
+
   <script>
   
   
@@ -92,7 +111,7 @@
   
           const data = await response.json();
           alert(`Fisa actualizata cu succes! ID: ${fileId}`);
-          router.push("/pets"); 
+          router.push(`/history/${file.value.petId}`); 
         } catch (error) {
           console.error("Eroare la actualizarea  fisei:", error);
           alert("A aparut o eroare la actualizarea fisei.");
@@ -111,31 +130,17 @@
     },
   };
   </script>
-  
-  <style scoped>
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  input,
-  button {
-    padding: 8px;
-    margin-bottom: 12px;
-    font-size: 16px;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  </style>
-  
+ 
+
+
+ <style scoped>
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f8f9fa;
+}
+</style>

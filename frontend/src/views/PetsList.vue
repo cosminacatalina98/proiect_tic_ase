@@ -1,8 +1,10 @@
 <template>
   <div class="container mx-auto px-4">
+   
+    <ConfirmDialog></ConfirmDialog>
     <h2 class="text-2xl font-semibold text-center my-4">Lista Animalelor</h2>
 
-  
+    
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div v-for="pet in pets" :key="pet.id" class="bg-white p-6 shadow-lg rounded-xl border">
         <h3 class="text-lg font-bold text-gray-800">{{ pet.name }}</h3>
@@ -14,12 +16,14 @@
       
         <div class="mt-4 flex flex-wrap gap-2">
           <button @click="editPet(pet.id)" class="btn btn-soft-blue">Editează</button>
-          <button @click="confirmDelete(pet.id)" class="btn btn-soft-red">Șterge</button>
+          <button @click="confirmDelete(pet)" class="btn btn-soft-red">Șterge</button>
           <button @click="addFile(pet.id)" class="btn btn-soft-green">Adaugă Fișă</button>
           <button @click="history(pet.id)" class="btn btn-soft-yellow">Istoric Fișe</button>
         </div>
       </div>
     </div>
+  
+
   </div>
 </template>
 
@@ -64,8 +68,17 @@ export default {
         message: `Sigur doriți să ștergeți pacientul ${pet.name}?`,
         header: "Confirmare Ștergere",
         icon: "pi pi-exclamation-triangle",
-        acceptLabel: "Da, șterge",
-        rejectLabel: "Anulează",
+        rejectProps: {
+            label: 'Anuleaza',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptProps: {
+            label: 'Sterge',
+            severity: 'danger'
+        },
+        // acceptLabel: "Da, șterge",
+        // rejectLabel: "Anulează",
         accept: () => deletePet(pet.id),
       });
     };
