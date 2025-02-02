@@ -7,7 +7,10 @@ const petsController = require("../controllers/PetsController");
 
 router.post("/", verifyToken, petsController.addPet);
 router.put("/:id", verifyToken, petsController.updatePet);
+router.delete("/:id", verifyToken, petsController.deletePet);
 
   module.exports = router;
+
+
 
   

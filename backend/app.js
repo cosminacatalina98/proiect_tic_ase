@@ -21,7 +21,8 @@ const { verifyToken } = require('./middleware/auth');
 const petsRoutes = require("./routes/petsRoutes"); 
 
 app.use("/api/pets", petsRoutes); 
-app.use("/api/pets/:id", petsRoutes); 
+// app.use("/api/pets/:id", petsRoutes); 
+
 
 
 
@@ -124,20 +125,6 @@ app.get("/api/pets/:id", async (req, res) => {
   }
 });
 
-
-
-app.delete("/api/pets/:id",verifyToken, async (req, res) => {
-  const petId = req.params.id;
-  
-  try {
-  
-    await db.collection("pets").doc(petId).delete();
-    res.status(200).json({ message: "Pacient sters cu succes" });
-  } catch (error) {
-    console.error("Eroare la stergerea pacientului:", error);
-    res.status(500).json({ error: "Eroare la stergerea pacientului" });
-  }
-});
 
 
 

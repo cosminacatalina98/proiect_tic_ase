@@ -115,3 +115,27 @@ exports.addPet = async (req, res)=> {
       res.status(500).json({ error: "Eroare la actualizarea pacientului" });
     }
   };
+
+  exports.deletePet = async (req, res)=> {
+    const petId = req.params.id;
+    
+    try {
+    
+      await db.collection("pets").doc(petId).delete();
+  
+      const filesSnapshot = await db.collection("files").where("petId", "==", petId).get();
+  
+      const batch = db.batch(); 
+      filesSnapshot.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+  
+      await batch.commit();
+  
+  
+      res.status(200).json({ message: "Pacientul si fisele asociate au fost sterse cu succes" });
+    } catch (error) {
+      console.error("Eroare la stergerea pacientului si a fiselor acestuia:", error);
+      res.status(500).json({ error: "Eroare la stergerea pacientului si a fiselor acestuia" });
+    }
+  };
