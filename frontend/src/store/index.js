@@ -27,20 +27,20 @@ const store = createStore({
   
   actions: {
 
-    async refreshToken({ commit }) {
-      const user = auth.currentUser;
-      if (user) {
-        const newToken = await user.getIdToken(true); 
-        commit("setToken", newToken);
-        localStorage.setItem("token", newToken);
-      }
-    },
+    // async refreshToken({ commit }) {
+    //   const user = auth.currentUser;
+    //   if (user) {
+    //     const newToken = await user.getIdToken(true); 
+    //     commit("setToken", newToken);
+    //     localStorage.setItem("token", newToken);
+    //   }
+    // },
 
     async login({ commit }, { email, password }) {
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const firebaseUser = userCredential.user;
-        const idToken = await firebaseUser.getIdToken();
+        const idToken = await firebaseUser.getIdToken(true);
 
         const response = await fetch("http://localhost:3000/api/login", {
           method: "POST",
@@ -68,6 +68,7 @@ const store = createStore({
       try {
         await signOut(auth);
         commit("clearAuth");
+        localStorage.removeItem("token");
       } catch (error) {
         console.error("Eroare la delogare:", error);
       }

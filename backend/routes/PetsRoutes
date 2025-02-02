@@ -6,6 +6,7 @@ const petsController = require("../controllers/PetsController");
 
 
 router.post("/", verifyToken, petsController.addPet);
+router.put("/:id", verifyToken, petsController.updatePet);
 
   module.exports = router;
 

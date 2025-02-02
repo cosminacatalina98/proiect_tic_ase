@@ -19,7 +19,10 @@ app.use(express.json())
 const { verifyToken } = require('./middleware/auth'); 
 
 const petsRoutes = require("./routes/petsRoutes"); 
+
 app.use("/api/pets", petsRoutes); 
+app.use("/api/pets/:id", petsRoutes); 
+
 
 
 
@@ -136,19 +139,7 @@ app.delete("/api/pets/:id",verifyToken, async (req, res) => {
   }
 });
 
-app.put("/api/pets/:id",verifyToken, async (req, res) => {
-  const petId = req.params.id;
-  const updatedPetData = req.body;
-  
-  try {
-  
-    await db.collection("pets").doc(petId).update(updatedPetData );
-    res.status(200).json({ message: "Pacientul a fost actualizat cu succes" });
-  } catch (error) {
-    console.error("Eroare la actualizarea pacientului:", error);
-    res.status(500).json({ error: "Eroare la actualizarea pacientului" });
-  }
-});
+
 
 app.post("/api/file",verifyToken, async (req, res) => {
   const fileData = req.body;
